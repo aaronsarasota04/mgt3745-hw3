@@ -3,25 +3,52 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Meeting notes | MGT 3745 starter</title>
+  <title>Job Match Checker</title>
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
 </head>
 <body>
-  <main>
-    <h1>Meeting notes</h1>
-    <p>Keep short notes in this browser. Use fictional, non-sensitive information.</p>
-    <form id="note-form" novalidate>
-      <label for="note-input">New note</label>
-      <p id="note-help">Enter 1–200 characters. Notes stay in this browser profile and site only.</p>
-      <input id="note-input" name="note" type="text" aria-describedby="note-help note-error" autocomplete="off">
-      <button type="submit">Save note</button>
-      <p id="note-error" role="alert"></p>
-    </form>
-    <p id="save-status" role="status" aria-live="polite"></p>
-    <h2>Saved notes</h2>
-    <p id="empty-state">No saved notes yet.</p>
-    <ul id="note-list" aria-label="Saved notes"></ul>
+  <main class="page-shell">
+    <section class="card hero">
+      <p class="eyebrow">Career fit helper</p>
+      <h1>Job Match Checker</h1>
+      <p>Enter the tools, frameworks, and languages you know, then compare them to the job requirements.</p>
+    </section>
+
+    <section class="card">
+      <h2>Your skills</h2>
+      <label for="skills-input">List the tools, frameworks, or languages you know</label>
+      <textarea id="skills-input" rows="8" placeholder="Python, SQL, AWS, React, JavaScript, Git, Docker"></textarea>
+    </section>
+
+    <section class="card">
+      <h2>Job requirements</h2>
+      <label for="job-input">Paste the job requirements or a LinkedIn URL</label>
+      <textarea id="job-input" rows="8" placeholder="Example: Python, SQL, ETL, Spark, AWS, Docker, Data Modeling"></textarea>
+      <input id="linkedin-url" type="url" placeholder="Optional: https://www.linkedin.com/company/..." autocomplete="off">
+      <button id="evaluate-button" type="button">Check match</button>
+      <p id="status-message" class="status-text" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="result-card" class="card results" hidden>
+      <h2>Fit summary</h2>
+      <p class="result-label">Target role</p>
+      <p id="target-role" class="result-value">Software engineer</p>
+      <p class="result-label">Match score</p>
+      <p id="match-score" class="score">0%</p>
+      <p id="match-summary" class="summary"></p>
+
+      <div class="column-grid">
+        <div>
+          <h3>Matched skills</h3>
+          <ul id="matched-list" class="list"></ul>
+        </div>
+        <div>
+          <h3>Missing skills</h3>
+          <ul id="missing-list" class="list"></ul>
+        </div>
+      </div>
+    </section>
   </main>
 </body>
 </html>

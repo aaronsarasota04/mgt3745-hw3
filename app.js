@@ -1,90 +1,256 @@
 (() => {
   'use strict';
 
-  const storageKey = 'mgt3745.notes.v617';
-  const noteForm = document.querySelector('#note-form');
-  const noteInput = document.querySelector('#note-input');
-  const noteList = document.querySelector('#note-list');
-  const noteError = document.querySelector('#note-error');
-  const saveStatus = document.querySelector('#save-status');
-  const emptyState = document.querySelector('#empty-state');
-  // The query switch enables a repeatable classroom failure without filling real storage.
-  const simulateFailedSave = new URLSearchParams(window.location.search).has('failSave');
-  let notes = loadNotes();
+  const storageKey = 'mgt3745.job-fit.v1';
+  const userSkillsInput = document.querySelector('#skills-input');
+  const jobInput = document.querySelector('#job-input');
+  const linkedInInput = document.querySelector('#linkedin-url');
+  const evaluateButton = document.querySelector('#evaluate-button');
+  const statusMessage = document.querySelector('#status-message');
+  const resultCard = document.querySelector('#result-card');
+  const targetRole = document.querySelector('#target-role');
+  const matchScore = document.querySelector('#match-score');
+  const matchSummary = document.querySelector('#match-summary');
+  const matchedList = document.querySelector('#matched-list');
+  const missingList = document.querySelector('#missing-list');
 
-  function loadNotes() {
+  const skillCatalog = [
+    { label: 'Python', aliases: ['python', 'py'] },
+    { label: 'JavaScript', aliases: ['javascript', 'js'] },
+    { label: 'SQL', aliases: ['sql'] },
+    { label: 'Java', aliases: ['java'] },
+    { label: 'React', aliases: ['react'] },
+    { label: 'Node.js', aliases: ['node.js', 'node', 'nodejs'] },
+    { label: 'AWS', aliases: ['aws', 'amazon web services'] },
+    { label: 'Docker', aliases: ['docker'] },
+    { label: 'Kubernetes', aliases: ['kubernetes', 'k8s'] },
+    { label: 'ETL', aliases: ['etl', 'extract transform load'] },
+    { label: 'Spark', aliases: ['spark'] },
+    { label: 'Git', aliases: ['git'] },
+    { label: 'REST APIs', aliases: ['rest api', 'rest apis', 'api design'] },
+    { label: 'Tableau', aliases: ['tableau'] },
+    { label: 'Power BI', aliases: ['power bi', 'powerbi'] },
+    { label: 'Excel', aliases: ['excel'] },
+    { label: 'Machine Learning', aliases: ['machine learning', 'ml'] },
+    { label: 'Statistics', aliases: ['statistics', 'statistical analysis'] },
+    { label: 'Data Modeling', aliases: ['data modeling', 'data model'] },
+    { label: 'Leadership', aliases: ['leadership', 'mentoring'] }
+  ];
+
+  const roleProfiles = {
+    'software engineer': ['JavaScript', 'Python', 'SQL', 'Git', 'REST APIs', 'AWS', 'React', 'Node.js'],
+    'data engineer': ['Python', 'SQL', 'ETL', 'Spark', 'AWS', 'Docker', 'Data Modeling', 'Git'],
+    'data analyst': ['SQL', 'Excel', 'Python', 'Statistics', 'Tableau', 'Power BI', 'Data Modeling'],
+    'backend engineer': ['Java', 'Python', 'SQL', 'REST APIs', 'AWS', 'Docker', 'Git'],
+    'machine learning engineer': ['Python', 'SQL', 'Machine Learning', 'Statistics', 'AWS', 'Git']
+  };
+
+  function normalizeSkill(value) {
+    return value
+      .toLowerCase()
+      .replace(/[^a-z0-9+#\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function parseList(value) {
+    return value
+      .split(/[\n,]+/)
+      .map(part => part.trim())
+      .filter(Boolean);
+  }
+
+  function canonicalSkillName(value) {
+    const normalized = normalizeSkill(value);
+    if (!normalized) {
+      return value.trim();
+    }
+
+    for (const skill of skillCatalog) {
+      if (skill.aliases.some(alias => normalizeSkill(alias) === normalized || normalized.includes(normalizeSkill(alias)))) {
+        return skill.label;
+      }
+    }
+
+    return value.trim();
+  }
+
+  function extractSkills(value) {
+    const entries = parseList(value);
+    const found = [];
+
+    entries.forEach(entry => {
+      const canonical = canonicalSkillName(entry);
+      if (canonical && !found.includes(canonical)) {
+        found.push(canonical);
+      }
+    });
+
+    return found;
+  }
+
+  function inferRoleFromUrl(urlValue) {
+    if (!urlValue) {
+      return 'software engineer';
+    }
+
+    const cleaned = urlValue
+      .toLowerCase()
+      .replace(/^https?:\/\//, '')
+      .replace(/^www\./, '')
+      .replace(/\/$/, '');
+
+    const combined = cleaned.split(/[^a-z0-9]+/).filter(Boolean).join(' ');
+
+    if (combined.includes('data') && combined.includes('engineer')) {
+      return 'data engineer';
+    }
+    if (combined.includes('data') && combined.includes('analyst')) {
+      return 'data analyst';
+    }
+    if (combined.includes('backend')) {
+      return 'backend engineer';
+    }
+    if (combined.includes('machine') && combined.includes('learning')) {
+      return 'machine learning engineer';
+    }
+    if (combined.includes('engineer')) {
+      return 'software engineer';
+    }
+
+    return 'software engineer';
+  }
+
+  function renderList(listNode, items) {
+    listNode.replaceChildren();
+
+    if (items.length === 0) {
+      const item = document.createElement('li');
+      item.textContent = 'No skill match yet.';
+      listNode.append(item);
+      return;
+    }
+
+    items.forEach(itemText => {
+      const item = document.createElement('li');
+      item.textContent = itemText;
+      listNode.append(item);
+    });
+  }
+
+  function loadState() {
     try {
       const storedText = window.localStorage.getItem(storageKey);
-      const parsed = storedText === null ? [] : JSON.parse(storedText);
-      if (!Array.isArray(parsed) || parsed.some(note => typeof note !== 'string')) {
+      if (storedText === null) {
+        return { userSkills: '', jobText: '', linkedinUrl: '' };
+      }
+
+      const parsed = JSON.parse(storedText);
+      if (!parsed || typeof parsed !== 'object') {
         throw new Error('Unexpected stored data');
       }
-      return parsed;
+
+      return {
+        userSkills: typeof parsed.userSkills === 'string' ? parsed.userSkills : '',
+        jobText: typeof parsed.jobText === 'string' ? parsed.jobText : '',
+        linkedinUrl: typeof parsed.linkedinUrl === 'string' ? parsed.linkedinUrl : ''
+      };
     } catch {
-      saveStatus.textContent = 'Saved notes could not be read. Original storage was left unchanged. A successful new save will replace it.';
-      return [];
+      statusMessage.textContent = 'Saved entries could not be read. Your current form values stay in place until you save again.';
+      return { userSkills: '', jobText: '', linkedinUrl: '' };
     }
   }
 
-  function saveNotes(nextNotes) {
+  function saveState(nextState) {
     try {
-      if (simulateFailedSave) throw new Error('Simulated write failure');
-      // Persist the proposed state before changing the visible state or clearing input.
-      window.localStorage.setItem(storageKey, JSON.stringify(nextNotes));
+      window.localStorage.setItem(storageKey, JSON.stringify(nextState));
       return true;
     } catch {
-      noteError.textContent = 'Could not save. Your text is still here. Try again when storage is available.';
-      saveStatus.textContent = '';
+      statusMessage.textContent = 'Could not save. Your typed values are still here and can be retried.';
       return false;
     }
   }
 
-  function renderNotes() {
-    noteList.replaceChildren();
-    emptyState.hidden = notes.length > 0;
-    notes.forEach((note, index) => {
-      const listItem = document.createElement('li');
-      const noteText = document.createElement('span');
-      noteText.textContent = note;
-      const deleteButton = document.createElement('button');
-      deleteButton.type = 'button';
-      deleteButton.textContent = 'Delete';
-      deleteButton.setAttribute('aria-label', `Delete note ${index + 1}: ${note}`);
-      deleteButton.addEventListener('click', () => {
-        const nextNotes = notes.filter((entry, entryIndex) => entryIndex !== index);
-        if (!saveNotes(nextNotes)) return;
-        notes = nextNotes;
-        noteError.textContent = '';
-        renderNotes();
-        saveStatus.textContent = 'Note deleted.';
-        noteInput.focus();
-      });
-      listItem.append(noteText, deleteButton);
-      noteList.append(listItem);
+  function evaluateMatch() {
+    const userSkills = extractSkills(userSkillsInput.value);
+    const jobText = jobInput.value.trim();
+    const urlText = linkedInInput.value.trim();
+
+    if (!userSkills.length) {
+      statusMessage.textContent = 'Enter at least one skill you know before checking a role.';
+      resultCard.hidden = true;
+      return;
+    }
+
+    if (!jobText && !urlText) {
+      statusMessage.textContent = 'Add the job requirements or paste a LinkedIn URL to compare against your skills.';
+      resultCard.hidden = true;
+      return;
+    }
+
+    const roleName = inferRoleFromUrl(urlText);
+    const jobRequirements = jobText
+      ? extractSkills(jobText)
+      : roleProfiles[roleName] || roleProfiles['software engineer'];
+
+    const matchedSkills = jobRequirements.filter(skill =>
+      userSkills.some(userSkill => normalizeSkill(userSkill) === normalizeSkill(skill))
+    );
+    const missingSkills = jobRequirements.filter(skill => !matchedSkills.includes(skill));
+    const score = jobRequirements.length === 0
+      ? 0
+      : Math.round((matchedSkills.length / jobRequirements.length) * 100);
+
+    const statusText = score >= 75
+      ? 'Strong fit. This role looks like a realistic match.'
+      : score >= 50
+        ? 'Partial fit. A few tools are missing, but the role may still be worth pursuing.'
+        : 'Weak fit. The missing requirements are significant for this role.';
+
+    targetRole.textContent = roleName;
+    matchScore.textContent = `${score}%`;
+    matchSummary.textContent = statusText;
+    renderList(matchedList, matchedSkills);
+    renderList(missingList, missingSkills);
+    resultCard.hidden = false;
+    statusMessage.textContent = 'Match check complete.';
+
+    saveState({
+      userSkills: userSkillsInput.value,
+      jobText: jobInput.value,
+      linkedinUrl: linkedInInput.value
     });
   }
 
-  noteForm.addEventListener('submit', event => {
-    event.preventDefault();
-    const candidate = noteInput.value.trim();
-    const characterCount = Array.from(candidate).length;
-    if (characterCount < 1 || characterCount > 200) {
-      noteError.textContent = 'Enter a note containing 1–200 characters.';
-      noteInput.setAttribute('aria-invalid', 'true');
-      saveStatus.textContent = '';
-      noteInput.focus();
-      return;
-    }
-    noteInput.removeAttribute('aria-invalid');
-    noteError.textContent = '';
-    const nextNotes = [...notes, candidate];
-    if (!saveNotes(nextNotes)) return;
-    notes = nextNotes;
-    renderNotes();
-    noteInput.value = '';
-    noteInput.focus();
-    saveStatus.textContent = 'Note saved in this browser.';
+  const savedState = loadState();
+  userSkillsInput.value = savedState.userSkills;
+  jobInput.value = savedState.jobText;
+  linkedInInput.value = savedState.linkedinUrl;
+
+  userSkillsInput.addEventListener('input', () => {
+    saveState({
+      userSkills: userSkillsInput.value,
+      jobText: jobInput.value,
+      linkedinUrl: linkedInInput.value
+    });
   });
 
-  renderNotes();
+  jobInput.addEventListener('input', () => {
+    saveState({
+      userSkills: userSkillsInput.value,
+      jobText: jobInput.value,
+      linkedinUrl: linkedInInput.value
+    });
+  });
+
+  linkedInInput.addEventListener('input', () => {
+    saveState({
+      userSkills: userSkillsInput.value,
+      jobText: jobInput.value,
+      linkedinUrl: linkedInInput.value
+    });
+  });
+
+  evaluateButton.addEventListener('click', evaluateMatch);
 })();
+
