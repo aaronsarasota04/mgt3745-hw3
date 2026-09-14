@@ -1,12 +1,9 @@
 # Standards
 
-Status: ACTIVE in Module 3. Adapt these rules to your feature and follow them.
-
-1. Use descriptive camelCase identifiers. Short conventional event/index names are acceptable when their role is obvious; arbitrary minimum name lengths are unnecessary.
-2. Separate HTML, CSS, and JavaScript into index.html, styles.css, and app.js. Use lexical scope; do not create accidental global variables.
-3. Explain important reasons in comments, not a narration of every statement. Remove temporary debug output before submission.
+1. Use descriptive camelCase identifiers. Short conventional event/index names are acceptable when their role is obvious; Variables/Constant names never longer than two words unless necessary
+2. Separate HTML, CSS, and JavaScript into index.html, styles.css, and app.js at a minimum. There can be more files if needed in the future.
+3. Comments should summarize the code snippet/file, not a detailed explanation. It should always be written in present tense and starting with a verb. Remove temporary debug output before submission.
 4. Write commit messages that name the changed behavior and purpose.
-5. Use textContent for user text. Never insert user strings through innerHTML.
-6. Associate form controls with labels and make success/error feedback perceivable. Preserve unsaved input when a write fails.
+5. Do not insert user input with innerHTML, and remove stray console.log statements before submission.
 
 This file is normative if an adapter or context/CLAUDE.md conflicts. Repair inconsistent copies; do not silently choose different policies for humans and agents.
