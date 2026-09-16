@@ -1,6 +1,7 @@
 (() => {
   'use strict';
 
+  // Keep saved drafts scoped to this feature and avoid accidental global variables.
   const storageKey = 'mgt3745.job-fit.v1';
   const userSkillsInput = document.querySelector('#skills-input');
   const jobInput = document.querySelector('#job-input');
@@ -14,6 +15,7 @@
   const matchedList = document.querySelector('#matched-list');
   const missingList = document.querySelector('#missing-list');
 
+  // Map common user-entered terms to stable labels used by the comparison result.
   const skillCatalog = [
     { label: 'Python', aliases: ['python', 'py'] },
     { label: 'JavaScript', aliases: ['javascript', 'js'] },
@@ -61,6 +63,7 @@
       .filter(Boolean);
   }
 
+  // Convert each entered item to one canonical skill name without changing the input text.
   function canonicalSkillName(value) {
     const normalized = normalizeSkill(value);
     if (!normalized) {
@@ -90,6 +93,7 @@
     return found;
   }
 
+  // Use role words in a supplied URL to select a fallback profile when requirements are absent.
   function inferRoleFromUrl(urlValue) {
     if (!urlValue) {
       return 'software engineer';
@@ -139,6 +143,7 @@
     });
   }
 
+  // Read and validate the last draft, falling back safely when storage is unavailable or corrupt.
   function loadState() {
     try {
       const storedText = window.localStorage.getItem(storageKey);
@@ -172,6 +177,7 @@
     }
   }
 
+  // Validate both inputs, calculate the percentage, and update only the result view.
   function evaluateMatch() {
     const userSkills = extractSkills(userSkillsInput.value);
     const jobText = jobInput.value.trim();
@@ -229,6 +235,7 @@
   jobInput.value = savedState.jobText;
   linkedInInput.value = savedState.linkedinUrl;
 
+  // Persist each field independently so a reload does not discard an in-progress comparison.
   userSkillsInput.addEventListener('input', () => {
     saveState({
       userSkills: userSkillsInput.value,

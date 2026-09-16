@@ -9,6 +9,7 @@
   --coral: #df6b4f;
 }
 
+/* Use a stable box model and a warm, readable base surface for the whole app. */
 * { box-sizing: border-box; }
 
 body {
@@ -24,6 +25,7 @@ body {
   padding: 3.5rem 1.5rem 5rem;
 }
 
+/* Give the introduction a distinct editorial rhythm before the working area begins. */
 .hero {
   display: flex;
   justify-content: space-between;
@@ -101,6 +103,7 @@ h3 {
   line-height: 1.15;
 }
 
+/* Keep instructions visually quieter than the controls that require user attention. */
 .workspace { padding: 4rem 0 1rem; }
 
 .section-heading {
@@ -131,6 +134,7 @@ h3 {
 
 .instruction { max-width: 18rem; margin: 0; }
 
+/* Place the candidate's toolkit beside the role details on larger screens. */
 .input-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -182,6 +186,7 @@ textarea {
 .url-label { margin-top: 1.25rem; }
 .field-hint { margin: 0.75rem 0 0; }
 
+/* Keep the primary action aligned with the supporting guidance without hiding either. */
 .action-row {
   display: flex;
   align-items: center;
@@ -226,6 +231,7 @@ textarea:focus-visible {
   font-size: 0.82rem;
 }
 
+/* Make the result panel the strongest visual layer so the percentage is easy to scan. */
 .results {
   margin-top: 3.5rem;
   padding: 2.5rem;
@@ -301,6 +307,7 @@ textarea:focus-visible {
 
 .results-footnote { margin: 2rem 0 0; color: #a8d8cd; }
 
+/* Collapse the comparison into a single readable column on narrow screens. */
 @media (max-width: 600px) {
   .page-shell {
     padding: 2rem 1rem 3rem;
@@ -337,6 +344,7 @@ textarea:focus-visible {
   .score-panel { padding-top: 2rem; }
 }
 
+/* Offset the two desktop input panels to create a deliberate visual sequence. */
 @media (min-width: 601px) {
   .input-panel:first-child { margin-top: 1.5rem; }
   .featured-input { margin-bottom: 1.5rem; }

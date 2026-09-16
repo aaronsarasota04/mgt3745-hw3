@@ -4,11 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Job Match Checker</title>
+  <!-- Keep presentation and behavior separate so each layer remains easy to maintain. -->
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
 </head>
 <body>
   <main class="page-shell">
+    <!-- Establish the page's purpose before asking the user for any information. -->
     <header class="hero">
       <div class="hero-copy">
         <p class="eyebrow">Career fit / 01</p>
@@ -21,6 +23,7 @@
       </div>
     </header>
 
+    <!-- Collect the two inputs needed to compare a candidate's skills with a role. -->
     <section class="workspace" aria-labelledby="workspace-title">
       <div class="section-heading">
         <p class="section-kicker">The input</p>
@@ -59,6 +62,7 @@
       <p id="status-message" class="status-text" role="status" aria-live="polite"></p>
     </section>
 
+    <!-- Reveal the comparison only after valid input has been evaluated. -->
     <section id="result-card" class="results" hidden aria-labelledby="results-title">
       <div class="results-header">
         <div>
