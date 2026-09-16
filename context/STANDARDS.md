@@ -16,3 +16,22 @@ This file is normative if an adapter or context/CLAUDE.md conflicts. Repair inco
 
 ## Split Test
 
+### Comments explain the purpose of significant JavaScript, HTML, and CSS sections so that other developers can understand and maintain the code.
+
+This applies to every task in the project because all tasks may require code changes that another developer must maintain. The rule stays consistent from task to task, although the specific sections that need comments will vary. Putting this rule in the wrong place risks **distraction**, because agents may repeatedly explain code that is already self-explanatory.
+
+**Verdict:** This rule belongs in `CLAUDE.md`.
+
+### Job-to-skill comparisons use percentages to consistently represent the degree of alignment between a user's skills and a job's requirements.
+
+This applies whenever the project presents a job-to-skill comparison, but it does not apply to every task. The rule stays the same when it is relevant, while the comparison data changes from task to task. Putting it in the wrong place risks **distraction**, because it would consume attention during tasks that do not involve job-match comparisons.
+
+**Verdict:** This rule belongs in `CLAUDE.md` because job-to-skill comparisons are a recurring project-wide requirement.
+
+### Use different font sizes and visual emphasis to help users distinguish between different types of webpage content, such as instructions, inputs, and results.
+
+This applies only to tasks that create or revise the webpage interface, not to every task in the project. The exact visual hierarchy changes from task to task based on the content and layout being designed. Putting it in the wrong place risks **poisoning**, because a rigid persistent instruction could make an otherwise appropriate interface harder to use.
+
+**Verdict:** This rule belongs in the prompt for the task that needs it.
+
+**Prompt snippet:** Use different font sizes and visual emphasis to help users distinguish between instructions, inputs, and results.
