@@ -3,7 +3,7 @@
 1. Job-to-skill comparisons use percentages to consistently represent the degree of alignment between a user's skills and a job's requirements.
 2. Use different font sizes and visual emphasis to help users distinguish between different types of webpage content, such as instructions, inputs, and results.
 3. Each JavaScript function has a distinct purpose and remains loosely coupled to other functions to support future expansion.
-4. Comments explain the purpose of significant JavaScript, HTML, and CSS sections so that other developers can understand and maintain the code.
+4. Comments explain the purpose of all JavaScript, HTML, and CSS sections so that other developers can understand and maintain the code.
 5. Job matches are presented as suggestions and must not imply or guarantee an interview or employment outcome.
 6. Use descriptive camelCase identifiers. Short conventional event/index names are acceptable when their role is obvious; arbitrary minimum name lengths are unnecessary.
 7. Separate HTML, CSS, and JavaScript into index.html, styles.css, and app.js. Use lexical scope; do not create accidental global variables.

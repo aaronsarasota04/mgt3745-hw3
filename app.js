@@ -45,6 +45,7 @@
     'machine learning engineer': ['Python', 'SQL', 'Machine Learning', 'Statistics', 'AWS', 'Git']
   };
 
+  // Normalize synonyms before comparison so common abbreviations count as the same skill.
   function normalizeSkill(value) {
     return value
       .toLowerCase()
@@ -222,6 +223,7 @@
     });
   }
 
+  // Restore the draft before wiring autosave so a failed storage write never clears typed input.
   const savedState = loadState();
   userSkillsInput.value = savedState.userSkills;
   jobInput.value = savedState.jobText;
