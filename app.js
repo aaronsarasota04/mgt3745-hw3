@@ -56,6 +56,7 @@
       .trim();
   }
 
+  // Split comma- and line-separated input into non-empty entries for comparison.
   function parseList(value) {
     return value
       .split(/[\n,]+/)
@@ -79,6 +80,7 @@
     return value.trim();
   }
 
+  // Build a unique list of canonical skills from the user's free-form entries.
   function extractSkills(value) {
     const entries = parseList(value);
     const found = [];
@@ -126,6 +128,7 @@
     return 'software engineer';
   }
 
+  // Render a safe text-only list and provide feedback when one side has no matches.
   function renderList(listNode, items) {
     listNode.replaceChildren();
 
@@ -167,6 +170,7 @@
     }
   }
 
+  // Persist the complete draft and report storage failures without discarding form values.
   function saveState(nextState) {
     try {
       window.localStorage.setItem(storageKey, JSON.stringify(nextState));

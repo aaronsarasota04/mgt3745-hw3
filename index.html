@@ -31,7 +31,9 @@
         <p class="instruction">Keep it simple. Separate items with commas or put each one on a new line.</p>
       </div>
 
+      <!-- Group the candidate skills and role requirements into equally visible work areas. -->
       <div class="input-grid">
+        <!-- Let the user describe their current toolkit without changing their wording. -->
         <div class="input-panel">
           <div class="field-heading">
             <span class="step-number">01</span>
@@ -42,6 +44,7 @@
           <p class="field-hint">Include coursework or project skills that reflect your current level.</p>
         </div>
 
+        <!-- Make the opportunity the emphasized comparison target. -->
         <div class="input-panel featured-input">
           <div class="field-heading">
             <span class="step-number">02</span>
@@ -55,6 +58,7 @@
         </div>
       </div>
 
+      <!-- Keep evaluation separate from data entry so the action is easy to find. -->
       <div class="action-row">
         <p class="action-note">A partial match can still be worth pursuing.</p>
         <button id="evaluate-button" type="button"><span>Compare fit</span><span aria-hidden="true">→</span></button>
@@ -73,12 +77,14 @@
         <p id="target-role" class="result-value">Software engineer</p>
       </div>
 
+      <!-- Lead with the percentage, then support it with a plain-language interpretation. -->
       <div class="score-panel">
         <p class="result-label">Skills alignment</p>
         <p id="match-score" class="score">0%</p>
         <p id="match-summary" class="summary"></p>
       </div>
 
+      <!-- Show evidence for the score by separating matched and missing skills. -->
       <div class="column-grid">
         <div class="skill-column matched-column">
           <h3>Matched skills</h3>
