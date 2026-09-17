@@ -5,7 +5,6 @@
   const storageKey = 'mgt3745.job-fit.v1';
   const userSkillsInput = document.querySelector('#skills-input');
   const jobInput = document.querySelector('#job-input');
-  const linkedInInput = document.querySelector('#linkedin-url');
   const evaluateButton = document.querySelector('#evaluate-button');
   const statusMessage = document.querySelector('#status-message');
   const resultCard = document.querySelector('#result-card');
@@ -95,39 +94,6 @@
     return found;
   }
 
-  // Use role words in a supplied URL to select a fallback profile when requirements are absent.
-  function inferRoleFromUrl(urlValue) {
-    if (!urlValue) {
-      return 'software engineer';
-    }
-
-    const cleaned = urlValue
-      .toLowerCase()
-      .replace(/^https?:\/\//, '')
-      .replace(/^www\./, '')
-      .replace(/\/$/, '');
-
-    const combined = cleaned.split(/[^a-z0-9]+/).filter(Boolean).join(' ');
-
-    if (combined.includes('data') && combined.includes('engineer')) {
-      return 'data engineer';
-    }
-    if (combined.includes('data') && combined.includes('analyst')) {
-      return 'data analyst';
-    }
-    if (combined.includes('backend')) {
-      return 'backend engineer';
-    }
-    if (combined.includes('machine') && combined.includes('learning')) {
-      return 'machine learning engineer';
-    }
-    if (combined.includes('engineer')) {
-      return 'software engineer';
-    }
-
-    return 'software engineer';
-  }
-
   // Render a safe text-only list and provide feedback when one side has no matches.
   function renderList(listNode, items) {
     listNode.replaceChildren();
@@ -151,7 +117,7 @@
     try {
       const storedText = window.localStorage.getItem(storageKey);
       if (storedText === null) {
-        return { userSkills: '', jobText: '', linkedinUrl: '' };
+        return { userSkills: '', jobText: '' };
       }
 
       const parsed = JSON.parse(storedText);
@@ -161,12 +127,11 @@
 
       return {
         userSkills: typeof parsed.userSkills === 'string' ? parsed.userSkills : '',
-        jobText: typeof parsed.jobText === 'string' ? parsed.jobText : '',
-        linkedinUrl: typeof parsed.linkedinUrl === 'string' ? parsed.linkedinUrl : ''
+        jobText: typeof parsed.jobText === 'string' ? parsed.jobText : ''
       };
     } catch {
       statusMessage.textContent = 'Saved entries could not be read. Your current form values stay in place until you save again.';
-      return { userSkills: '', jobText: '', linkedinUrl: '' };
+      return { userSkills: '', jobText: '' };
     }
   }
 
@@ -185,7 +150,6 @@
   function evaluateMatch() {
     const userSkills = extractSkills(userSkillsInput.value);
     const jobText = jobInput.value.trim();
-    const urlText = linkedInInput.value.trim();
 
     if (!userSkills.length) {
       statusMessage.textContent = 'Enter at least one skill you know before checking a role.';
@@ -193,17 +157,13 @@
       return;
     }
 
-    if (!jobText && !urlText) {
-      statusMessage.textContent = 'Add the job requirements or paste a LinkedIn URL to compare against your skills.';
+    if (!jobText) {
+      statusMessage.textContent = 'Add the job requirements to compare against your skills.';
       resultCard.hidden = true;
       return;
     }
 
-    const roleName = inferRoleFromUrl(urlText);
-    const jobRequirements = jobText
-      ? extractSkills(jobText)
-      : roleProfiles[roleName] || roleProfiles['software engineer'];
-
+    const jobRequirements = extractSkills(jobText);
     const matchedSkills = jobRequirements.filter(skill =>
       userSkills.some(userSkill => normalizeSkill(userSkill) === normalizeSkill(skill))
     );
@@ -218,7 +178,7 @@
         ? 'Partial fit. A few tools are missing, but the role may still be worth pursuing.'
         : 'Weak fit. The missing requirements are significant for this role.';
 
-    targetRole.textContent = roleName;
+    targetRole.textContent = 'Role fit';
     matchScore.textContent = `${score}%`;
     matchSummary.textContent = statusText;
     renderList(matchedList, matchedSkills);
@@ -228,8 +188,7 @@
 
     saveState({
       userSkills: userSkillsInput.value,
-      jobText: jobInput.value,
-      linkedinUrl: linkedInInput.value
+      jobText: jobInput.value
     });
   }
 
@@ -237,30 +196,19 @@
   const savedState = loadState();
   userSkillsInput.value = savedState.userSkills;
   jobInput.value = savedState.jobText;
-  linkedInInput.value = savedState.linkedinUrl;
 
   // Persist each field independently so a reload does not discard an in-progress comparison.
   userSkillsInput.addEventListener('input', () => {
     saveState({
       userSkills: userSkillsInput.value,
-      jobText: jobInput.value,
-      linkedinUrl: linkedInInput.value
+      jobText: jobInput.value
     });
   });
 
   jobInput.addEventListener('input', () => {
     saveState({
       userSkills: userSkillsInput.value,
-      jobText: jobInput.value,
-      linkedinUrl: linkedInInput.value
-    });
-  });
-
-  linkedInInput.addEventListener('input', () => {
-    saveState({
-      userSkills: userSkillsInput.value,
-      jobText: jobInput.value,
-      linkedinUrl: linkedInInput.value
+      jobText: jobInput.value
     });
   });
 
