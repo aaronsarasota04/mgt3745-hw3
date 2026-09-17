@@ -86,13 +86,17 @@
     return found;
   }
 
-  // Render a safe text-only list and provide feedback when one side has no matches.
-  function renderList(listNode, items) {
+  // Render a safe text-only list and allow empty lists to stay empty when a perfect match has no missing skills.
+  function renderList(listNode, items, emptyText = 'No skill match yet.') {
     listNode.replaceChildren();
 
     if (items.length === 0) {
+      if (emptyText === null) {
+        return;
+      }
+
       const item = document.createElement('li');
-      item.textContent = 'No skill match yet.';
+      item.textContent = emptyText;
       listNode.append(item);
       return;
     }
@@ -174,7 +178,7 @@
     matchScore.textContent = `${score}%`;
     matchSummary.textContent = statusText;
     renderList(matchedList, matchedSkills);
-    renderList(missingList, missingSkills);
+    renderList(missingList, missingSkills, score === 100 ? null : 'No skill match yet.');
     resultCard.hidden = false;
     statusMessage.textContent = 'Match check complete.';
 
