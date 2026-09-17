@@ -21,8 +21,7 @@ function makeElement() {
   };
 }
 
-function loadApp() {
-  const storage = {};
+function loadApp(storage = {}) {
   const elements = {};
   const ids = [
     'skills-input',
@@ -75,6 +74,7 @@ function loadApp() {
 
   return {
     elements,
+    storage,
     clickEvaluate() {
       elements['evaluate-button'].click();
     }
@@ -181,4 +181,20 @@ test('EARS 7: blank items and duplicate values are ignored after normalization',
   assert.equal(elements['match-score'].textContent, '100%');
   assert.equal(elements['missing-list'].children.length, 0);
   console.log('EARS 7 passed');
+});
+
+test('EARS 8: saved skill lists survive a page reload after comparison', () => {
+  const firstLoad = loadApp();
+
+  firstLoad.elements['skills-input'].value = 'Python, Java, Go, Rust';
+  firstLoad.elements['job-input'].value = 'Python, Go, Databricks';
+  firstLoad.clickEvaluate();
+
+  assert.equal(firstLoad.elements['match-score'].textContent, '67%');
+
+  const reloadedPage = loadApp(firstLoad.storage);
+
+  assert.equal(reloadedPage.elements['skills-input'].value, 'Python, Java, Go, Rust');
+  assert.equal(reloadedPage.elements['job-input'].value, 'Python, Go, Databricks');
+  console.log('EARS 8 passed');
 });

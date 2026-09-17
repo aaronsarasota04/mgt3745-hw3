@@ -67,6 +67,7 @@ This feature is designed for early-career technical job seekers navigating compe
 - IF the computed match score is below 50%, THEN THE SYSTEM SHALL display a weak-fit summary and list all missing qualifications in descending order of the job list.
 - IF the computed match score is between 0% and 100% inclusive, THEN THE SYSTEM SHALL show the matched skills and missing skills as separate lists to support objective review of the comparison.
 - THE SYSTEM SHALL ignore blank entries and duplicate values after normalization so that match calculations are repeatable and objectively testable.
+- IF the user reloads the page after comparing two lists, THEN THE SYSTEM SHALL restore both entered lists from saved browser state.
 
 ---
 
@@ -85,5 +86,6 @@ This feature is designed for early-career technical job seekers navigating compe
 | EARS 5: weak fit threshold | Enter user list `Python` and job list `Python, SQL, ETL, AWS`, then click Compare fit. | Score is below 50% and the weak-fit summary appears. | Score displayed as 25% and the weak-fit summary was shown. | PASS | Verified by `node --test app.test.js` with EARS 5 test. |
 | EARS 6: separate matched/missing lists | Enter user list `Python, SQL` and job list `Python, SQL, ETL`, then click Compare fit. | Matched and missing lists are both shown. | Matched list retained `Python` and `SQL`; missing list retained `ETL`. | PASS | Verified by `node --test app.test.js` with EARS 6 test. |
 | EARS 7: normalization and deduplication | Enter `Python, , SQL, Python` and `Python, SQL, SQL`, then click Compare fit. | Blank items and duplicates are ignored, and score is 100%. | Score displayed as 100% and missing list stayed empty. | PASS | Verified by `node --test app.test.js` with EARS 7 test. |
+| EARS 8: saved lists survive reload | Enter user list `Python, Java, Go, Rust` and job list `Python, Go, Databricks`, compare, then reload the page. | The percentage is generated and both entered lists remain available after reload. | Score displayed as 67%, and both lists were restored after reload; behavior was also manually checked. | PASS | Verified by `node --test app.test.js` with EARS 8 test and manual check. |
 
 Cover a normal action, relevant invalid input, and persistence or failure. Classify unselected requirements separately. Record actual outcomes; all-PASS is acceptable with evidence.

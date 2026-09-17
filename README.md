@@ -4,31 +4,20 @@
 ![Status](https://img.shields.io/badge/status-in%20progress-yellow)
 ![Module](https://img.shields.io/badge/MGT%203745-HW3-051E39)
 
-> HW3, MGT 3745 O. Replace every [bracketed prompt] with your own writing.
-> Lines between `<!--` and `-->` are notes to you. They are invisible on GitHub. Delete them when done.
-> This README is the first thing an employer, a teammate, or an agent reads. It makes
-> a case for the repository. Show, then tell.
-
 ## What
 
 The Job Skill Comparision Application helps technical job seekers decide whether a role is worth pursuing by comparing their skills with a job's requirements. It reports a percentage alignment score, shows matched and missing skills, and presents the result as a suggestion rather than a guarantee of an interview or job offer. See the project context in [PROJECT.md](context/PROJECT.md) and the feature requirements in [FEATURES.md](context/FEATURES.md).
 
 ## See It Work
 
-<!-- REQUIRED: at least one image or GIF of the feature meeting an EARS statement.
-     Put media in the docs/ folder. Keep GIFs under 5 MB.
-     Record: macOS Cmd+Shift+5, Windows Win+Alt+R or Snipping Tool video. Convert at ezgif.com.
-     Markdown image syntax: -->
-Put a screenshot or GIF under docs/ and link it here with descriptive alt text. Explain which acceptance criterion it demonstrates. A screenshot does not prove reload or storage behavior by itself.
-![Saving an entry and seeing it appear in the list](docs/demo.gif)
+![A screenshot of the running app meeting an EARS Statement - IF either list is empty after trimming and removing blanks, THEN THE SYSTEM SHALL display a validation message and SHALL NOT compute a match score.](docs/image-1.png)
 
 <!-- HTML gives you sizing control markdown does not: -->
 <!-- <img src="docs/screenshot.png" width="480" alt="The entry list after three saves"> -->
 
 ## How to Run
 
-Create your repository from the instructor's HW3 template and name it `mgt3745-hw3`. The supplied app is a starter; adapt it to one feature from your own specification.
-This project runs inside a GitHub Codespace. No local install.
+Open this repository in a GitHub Codespace. No local install is required.
 
 1. On your repository page, click **Code → Codespaces → Create codespace on main**. Wait for setup to finish; first-boot time varies.
 2. Keep the supplied `.devcontainer/devcontainer.json`. It configures Live Server installation and port 5500 forwarding. Once the extension is ready, right-click `index.html` and choose **Open with Live Server**, or use **Go Live**.
@@ -64,22 +53,16 @@ The application reads saved drafts, accepts comma- or line-separated skills, nor
 
 | Area | State | Why |
 |------|-------|-----|
-| Save and display | [Works / Partial / Broken / Not tested] | [Link your verification evidence] |
-| Invalid input | [Works / Partial / Broken / Not tested] | [Link your verification evidence] |
-| Data survives reload / storage failure | [Works / Partial / Broken / Not tested] | [Link your verification evidence] |
-| Multi-user sync (starter limitation) | Deferred | Browser-local storage does not provide sync. Explain your own scope and decision in [ADR-001](context/ARCHITECTURE.md). |
+| Save and display | Works | The [unit tests](app.test.js) verify that a percentage match is displayed. |
+| Invalid input | Not tested | Kept simple for now; dedicated invalid-input testing will be added in the future. |
+| Data survives reload / storage failure | Partial | [EARS 8](app.test.js) verifies that the saved skill lists return after a page reload, and the behavior was manually checked; other cases of storage-failure handling has not been implemented. |
+| Multi-user sync (starter limitation) | Deferred | Browser-local storage does not provide sync.
 
 
 <details>
 <summary>Verification results (click to expand)</summary>
 
-Keep the full verification record in [FEATURES.md](context/FEATURES.md). Summarize it here or link directly to its Verification section; keep both consistent.
-
-| Criterion / EARS statement | Steps and input | Expected result | Observed result | Status | Evidence / commit |
-|---|---|---|---|---|---|
-| [Your selected criterion ID] | [Reproducible procedure] | [State before testing] | [What actually happened] | [PASS / FAIL / CANNOT TEST / DEFERRED] | [Link] |
-
-Cover a normal action, relevant invalid input, and persistence or failure. PASS requires observed results that match expectations; all-PASS is acceptable with evidence. For CANNOT TEST, state the limitation and next step. Identify unselected requirements separately; DEFERRED does not waive the required HW3 feature. A screenshot alone cannot establish reload or storage-failure behavior.
+The automated suite passed all 8 EARS tests, covering comparison percentages, empty input validation, fit thresholds, matched and missing lists, normalization, and reload persistence. See the [full Verification results](context/FEATURES.md#verification) for the procedures and observed outcomes. Storage-failure handling is not implemented.
 
 </details>
 
@@ -108,19 +91,24 @@ Root README.md and the two instruction adapters—[CLAUDE.md](CLAUDE.md) and [.g
 
 <!-- A Delegation Decision Record without the name. From HW5 this becomes a formal DDR. -->
 
-**Tool and task delegated:** [Which parts a tool drafted: e.g. "Copilot drafted render() and the CSS."]
+**Tool and task delegated:** Creation of app.js and associated unit tests to cover EARS evidence, index.html, styles.css and generation of parts of README.md, CLAUDE.md. For other files it was used to polish writing after my drafts.
 
-**Why:** [The reason it made sense to delegate that part rather than write it.]
+**Why:** Creating the app by hand and testing it would have taken a lot of time (estimating a month).  Generating the How it works, what it does sections of the README makes sense since AI could use app.js, index.html, styles.css and context files to easily generate this information.
 
-**How it was checked:** [What you inspected, what you changed, what you caught. "Replaced innerHTML with textContent" is the kind of sentence that belongs here.]
+**How it was checked:** Manually checked code to see whether instances of innerHTML was used(which it did not). After AI generated the app I made edits to increase font size for validation message, edit and remove pre-written text, and remove dead code not used.
 
-**Observed result / evidence:** [What the checks actually showed; link the relevant verification row, code change, or other evidence. Do not invent a run.]
+**Observed result / evidence:** The change history records the following feature work and checks:
 
-If no AI assistance was used, say so and describe your independent check. Full Delegation Decision Records begin at HW5; this lightweight record is sufficient here.
+- [Verification results](context/FEATURES.md#verification).
+- [Validation message styling](styles.css) was checked with the empty-input EARS test and manual visual review; commit `2aaca8f5e1c87582b1a9f2192e602c61e8d93e57` records the increase in message size.
+- [Prefilled input removal](index.html) was manually checked by confirming both fields open blank; commit `a964338c9c967bd91fea72a4bbff6ebf5f451067` records the removal.
+- [No skill match despite 100% display fix](https://github.com/aaronsarasota04/mgt3745-hw3/commit/9d3f2e24f8877f557100ac5fbced39801850e113) was checked by the exact-match EARS test.
+- [LinkedIn link removal](https://github.com/aaronsarasota04/mgt3745-hw3/commit/2f78fff6e6fbebf672bb16df2d56da04018ebe40) and [role profile removal](https://github.com/aaronsarasota04/mgt3745-hw3/commit/6878148e9c2a01342d2225e96fbe80a71584a5a9) were manually reviewed as scope reductions; the current unit suite checks that the remaining comparison workflow still passes.
 
-**Instruction discovery and compliance:** [Record the tool and mode, which instruction adapter it discovered, and the reference or diagnostic evidence. Separately report whether one generated change followed the applicable standards. If no live AI tool is available, write “not run” and record a manual standards review.]
+**Instruction discovery and compliance:** Github Copilot. It read instructions from CLAUDE.md. All standards in CLAUDE.md has been ensured it is present in the code
 
-**Actual hours on this assignment (optional):** [A number, if you choose to report it. The amount or omission does not affect points; the AI-use record does.]
+
+**Actual hours on this assignment (optional):** 6
 
 ## Explain, Change, Verify
 
