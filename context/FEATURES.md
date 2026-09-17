@@ -60,11 +60,13 @@ This feature is designed for early-career technical job seekers navigating compe
 
 ## 6. Acceptance
 
-- WHEN the user reviews a job posting, THE SYSTEM SHALL compare the role’s requirements to the user’s skills, projects, and relevant experience.
-- IF the role is only a partial match, THEN THE SYSTEM SHALL flag it as a potential fit and show which qualifications are missing or weak.
-- THE SYSTEM SHALL evaluate opportunities from multiple sources, including job boards, company career pages, and networking channels, before recommending a role.
-- WHILE the user is comparing roles, THE SYSTEM SHALL display a fit summary that separates must-have requirements from preferred qualifications.
-- WHERE recruiter contact information is available, THE SYSTEM SHALL suggest a follow-up message based on the user’s qualifications and role fit.
+- WHEN the user enters two comma- or line-separated lists, THE SYSTEM SHALL compare the list values by normalized skill names and compute a percentage match as the integer value of round((matchedSkillCount / totalJobSkillCount) * 100), where totalJobSkillCount is the number of unique normalized skills in the job list.
+- IF either list is empty after trimming and removing blanks, THEN THE SYSTEM SHALL display a validation message and SHALL NOT compute a match score.
+- IF the computed match score is 100%, THEN THE SYSTEM SHALL display 100% and SHALL show no missing-skill entries.
+- IF the computed match score is between 50% and 99%, THEN THE SYSTEM SHALL display a potential-fit summary and list the qualifications that are missing from the user’s list.
+- IF the computed match score is below 50%, THEN THE SYSTEM SHALL display a weak-fit summary and list all missing qualifications in descending order of the job list.
+- IF the computed match score is between 0% and 100% inclusive, THEN THE SYSTEM SHALL show the matched skills and missing skills as separate lists to support objective review of the comparison.
+- THE SYSTEM SHALL ignore blank entries and duplicate values after normalization so that match calculations are repeatable and objectively testable.
 
 ---
 
@@ -76,6 +78,12 @@ This feature is designed for early-career technical job seekers navigating compe
 
 | Criterion | Steps and input | Expected result | Observed result | Status | Evidence / commit |
 |---|---|---|---|---|---|
-| Your selected ID | Reproducible procedure | Before running | Actual observation | PASS / FAIL / CANNOT TEST / DEFERRED | Link |
+| EARS 1: normalized comparison | Enter user list `Python, SQL, AWS` and job list `Python, SQL, ETL, AWS`, then click Compare fit. | Score is 75% and the summary reflects a strong fit. | Score displayed as 75% and the strong-fit summary was shown. | PASS | Verified by `node --test app.test.js` with EARS 1 test. |
+| EARS 2: empty input validation | Enter an empty user list with `Python` in the job list, then click Compare fit. Also test the reverse. | Validation message appears and no score is computed. | The status message was `Enter at least one skill you know before checking a role.` and then `Add the job requirements to compare against your skills.` | PASS | Verified by `node --test app.test.js` with EARS 2 test. |
+| EARS 3: exact match | Enter user list `Python, SQL, AWS` and job list `Python, SQL, AWS`, then click Compare fit. | Score is 100% and missing list is empty. | Score displayed as 100% and missing list had zero entries. | PASS | Verified by `node --test app.test.js` with EARS 3 test. |
+| EARS 4: partial fit threshold | Enter user list `Python, SQL` and job list `Python, SQL, ETL, AWS`, then click Compare fit. | Score is 50% and missing skills are listed. | Score displayed as 50% and the missing list included `ETL` and `AWS`. | PASS | Verified by `node --test app.test.js` with EARS 4 test. |
+| EARS 5: weak fit threshold | Enter user list `Python` and job list `Python, SQL, ETL, AWS`, then click Compare fit. | Score is below 50% and the weak-fit summary appears. | Score displayed as 25% and the weak-fit summary was shown. | PASS | Verified by `node --test app.test.js` with EARS 5 test. |
+| EARS 6: separate matched/missing lists | Enter user list `Python, SQL` and job list `Python, SQL, ETL`, then click Compare fit. | Matched and missing lists are both shown. | Matched list retained `Python` and `SQL`; missing list retained `ETL`. | PASS | Verified by `node --test app.test.js` with EARS 6 test. |
+| EARS 7: normalization and deduplication | Enter `Python, , SQL, Python` and `Python, SQL, SQL`, then click Compare fit. | Blank items and duplicates are ignored, and score is 100%. | Score displayed as 100% and missing list stayed empty. | PASS | Verified by `node --test app.test.js` with EARS 7 test. |
 
 Cover a normal action, relevant invalid input, and persistence or failure. Classify unselected requirements separately. Record actual outcomes; all-PASS is acceptable with evidence.
