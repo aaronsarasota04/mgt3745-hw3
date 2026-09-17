@@ -8,4 +8,10 @@ If a rule conflicts with another instruction file, resolve the conflict intentio
 
 Root CLAUDE.md imports this file for Claude Code. VS Code Copilot uses the separate .github/copilot-instructions.md adapter. A location under /context alone is not a guarantee of automatic discovery.
 
+### Colleague Test
+
+ -Read By- Prince 
+ -Misunderstood or asked about- Why I ask Claude to use different font sizes for the app
+ -Revision made: Removed from STANDARDS.md and CLAUDE.md and added to the prompt instead.
+
 
