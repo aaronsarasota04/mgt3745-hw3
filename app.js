@@ -38,14 +38,6 @@
     { label: 'Leadership', aliases: ['leadership', 'mentoring'] }
   ];
 
-  const roleProfiles = {
-    'software engineer': ['JavaScript', 'Python', 'SQL', 'Git', 'REST APIs', 'AWS', 'React', 'Node.js'],
-    'data engineer': ['Python', 'SQL', 'ETL', 'Spark', 'AWS', 'Docker', 'Data Modeling', 'Git'],
-    'data analyst': ['SQL', 'Excel', 'Python', 'Statistics', 'Tableau', 'Power BI', 'Data Modeling'],
-    'backend engineer': ['Java', 'Python', 'SQL', 'REST APIs', 'AWS', 'Docker', 'Git'],
-    'machine learning engineer': ['Python', 'SQL', 'Machine Learning', 'Statistics', 'AWS', 'Git']
-  };
-
   // Normalize synonyms before comparison so common abbreviations count as the same skill.
   function normalizeSkill(value) {
     return value
