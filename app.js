@@ -148,12 +148,14 @@
     const jobText = jobInput.value.trim();
 
     if (!userSkills.length) {
+      statusMessage.className = 'status-text validation-message';
       statusMessage.textContent = 'Enter at least one skill you know before checking a role.';
       resultCard.hidden = true;
       return;
     }
 
     if (!jobText) {
+      statusMessage.className = 'status-text validation-message';
       statusMessage.textContent = 'Add the job requirements to compare against your skills.';
       resultCard.hidden = true;
       return;
@@ -180,6 +182,7 @@
     renderList(matchedList, matchedSkills);
     renderList(missingList, missingSkills, score === 100 ? null : 'No skill match yet.');
     resultCard.hidden = false;
+    statusMessage.className = 'status-text';
     statusMessage.textContent = 'Match check complete.';
 
     saveState({

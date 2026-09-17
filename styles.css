@@ -243,6 +243,13 @@ textarea:focus-visible {
   font-size: 0.82rem;
 }
 
+/* Give blocking input errors enough contrast and size to be noticed before retrying. */
+.status-text.validation-message {
+  color: var(--coral);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
 /* Make the result panel the strongest visual layer so the percentage is easy to scan. */
 .results {
   margin-top: 3.5rem;

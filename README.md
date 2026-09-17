@@ -1,4 +1,4 @@
-# [Project Name]
+# Job Skill Comparision Application
 
 <!-- Badges are optional but cheap. shields.io generates them from a URL. -->
 ![Status](https://img.shields.io/badge/status-in%20progress-yellow)
@@ -11,7 +11,7 @@
 
 ## What
 
-Replace this title and paragraph with your chosen feature and link [PROJECT.md](context/PROJECT.md) and [FEATURES.md](context/FEATURES.md). This runnable "meeting notes" application is a teaching starter, not a completed student submission. Adapt it to your researched feature and make a meaningful change you can explain.
+The Job Skill Comparision Application helps technical job seekers decide whether a role is worth pursuing by comparing their skills with a job's requirements. It reports a percentage alignment score, shows matched and missing skills, and presents the result as a suggestion rather than a guarantee of an interview or job offer. See the project context in [PROJECT.md](context/PROJECT.md) and the feature requirements in [FEATURES.md](context/FEATURES.md).
 
 ## See It Work
 
@@ -48,19 +48,17 @@ If Live Server is unavailable, run `node scripts/serve.mjs` in the terminal, the
 
 ```mermaid
 flowchart TD
- A[Page opens] --> B[loadNotes: read and validate localStorage]
-  B --> C[renderNotes: draw current state]
-  D[User submits entry] --> E{Trimmed input is 1 to 200 characters?}
-  E -->|No| F[Show validation error and keep input]
-  E -->|Yes| G[Create proposed notes array]
-  G --> H{saveNotes: storage write succeeds?}
-  H -->|No| I[Show save error; keep input and current list]
-  H -->|Yes| J[Update in-memory notes]
-  J --> K[renderNotes: redraw list]
-  K --> L[Clear input and announce saved]
+ A[Page opens] --> B[Restore draft from localStorage]
+ B --> C[User enters skills and job requirements]
+ C --> D[Split, normalize, and remove blanks and duplicates]
+ D --> E{Both lists contain skills?}
+ E -->|No| F[Show validation message and keep form values]
+ E -->|Yes| G[Calculate percentage of matched job skills]
+ G --> H[Show score, summary, matched skills, and missing skills]
+ H --> I[Save draft to localStorage]
 ```
 
-This diagram describes the starter's load-and-add flow. Update it to match your implementation. In `app.js`, `loadNotes` reads stored data, `saveNotes` attempts to persist a proposed state, and `renderNotes` draws the current state using `textContent` for user text. The submit handler validates input and updates the visible state only after a successful save. Delete also saves the proposed state before redrawing. A read failure shows a warning and starts with an empty in-memory list; it leaves the original storage unchanged until a successful new save replaces it.
+The application reads saved drafts, accepts comma- or line-separated skills, normalizes common aliases, and ignores blank or duplicate entries. It compares each unique job requirement with the user's skills, calculates the percentage match, and renders separate matched and missing lists. Input validation and storage error messages preserve the user's typed values.
 
 ## Status
 
@@ -96,6 +94,11 @@ Read in this order:
 4. [`context/ARCHITECTURE.md`](context/ARCHITECTURE.md): the gate and ADR-001
 5. [`context/STANDARDS.md`](context/STANDARDS.md): the rules this code follows
 6. [`context/CLAUDE.md`](context/CLAUDE.md): the same rules, for agents
+7. [`index.html`](index.html): the page structure and form controls
+8. [`styles.css`](styles.css): the page styling and layout
+9. [`app.js`](app.js): comparison, validation, rendering, and storage logic
+10. [`app.test.js`](app.test.js): automated behavior tests
+11. [`manifest.json`](manifest.json): application metadata
 
 The scaffold has **eleven canonical files in `/context`: six active files above and five previews**: [STYLE.md](context/STYLE.md), [TOOLS.md](context/TOOLS.md), [SKILLS.md](context/SKILLS.md), [EVALS.md](context/EVALS.md), and [AGENTS.md](context/AGENTS.md). Keep the previews; verification stays in FEATURES.md until EVALS.md activates in Module 5.
 
