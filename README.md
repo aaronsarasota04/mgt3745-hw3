@@ -10,6 +10,8 @@ The Job Skill Comparision Application helps technical job seekers decide whether
 
 ## See It Work
 
+This screenshot shows the app meeting the empty-input EARS requirement: when either list is empty after trimming and removing blanks, the page displays a validation message and does not compute a match score. This behavior is verified in the acceptance checks and is described in the Explain, Change, Verify section at the bottom th page which describes the function which generates the percentage match.
+
 ![A screenshot of the running app meeting an EARS Statement - IF either list is empty after trimming and removing blanks, THEN THE SYSTEM SHALL display a validation message and SHALL NOT compute a match score.](docs/image-1.png)
 
 <!-- HTML gives you sizing control markdown does not: -->
