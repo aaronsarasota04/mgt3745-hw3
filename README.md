@@ -116,7 +116,13 @@ Root README.md and the two instruction adapters—[CLAUDE.md](CLAUDE.md) and [.g
 
 The function evaluateMatch does not take in any input. It extracts the skills input by the user for themselves and for the job they are trying to compare it with into two lists (these are saved as constants) . If any of these lists are null, then it prints a validation message, depending on which list is null. It then filters out matched skills, missing skills, and calculates a percentage of skills matched. If the percentage is more than 75%, a message saying it is a strong fit is recorded; if it is between 50 and 75%, it is a partial fit, otherwise it is a weak fit. All of these constants are then output to show on the webpage. This function is crucial to the webpage, since it handles the main logic on how two lists are converted to a percentage the user can then use to decide whether to pursue that job or not.
 
+### Before and after the code change
 
+Before the change, the app did not do anything once Compare fit is clicked. The logic when this is clicked is controlled by evaluateMatch which can be seen in the second photo below. 
+
+![Before the code change](docs/Before%20code%20change.png)
+
+![After the code change](docs/After%20code%20change.png)
 
 <!-- Things this README could also do, if they earn their place:
      - GitHub alerts:  > [!NOTE]  > [!WARNING]  > [!TIP]
