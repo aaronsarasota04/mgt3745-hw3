@@ -8,7 +8,6 @@
   const evaluateButton = document.querySelector('#evaluate-button');
   const statusMessage = document.querySelector('#status-message');
   const resultCard = document.querySelector('#result-card');
-  const targetRole = document.querySelector('#target-role');
   const matchScore = document.querySelector('#match-score');
   const matchSummary = document.querySelector('#match-summary');
   const matchedList = document.querySelector('#matched-list');
@@ -176,7 +175,6 @@
         ? 'Partial fit. A few tools are missing, but the role may still be worth pursuing.'
         : 'Weak fit. The missing requirements are significant for this role.';
 
-    targetRole.textContent = 'Role fit';
     matchScore.textContent = `${score}%`;
     matchSummary.textContent = statusText;
     renderList(matchedList, matchedSkills);
