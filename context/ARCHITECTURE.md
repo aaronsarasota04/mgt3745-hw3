@@ -18,7 +18,7 @@ Status: ACTIVE in Module 3.
 Title and date: Browser-based job-fit calculator built with AI assistance, 2026-09-13
 Status: Accepted
 
-Door: Build. We choose a browser-based build using AI assistance during implementation rather than purchasing an existing service or delegating the app to a third-party provider.
+Door: Delegate. We choose a browser-based build using AI assistance during implementation rather than purchasing an existing service or delegating the app to a third-party provider.
 
 Context: Feature 2 is a performance-class need: the product should help a student decide whether a role is worth pursuing when the posted requirements are only a partial match. The workflow should be transparent and user-controlled: the user supplies their résumé or qualifications, the job description lists required technologies and skills, and the app calculates how many requirements are covered. This keeps the decision grounded in evidence the user can inspect while still using AI assistance to accelerate implementation and improve clarity of the fit analysis.
 
